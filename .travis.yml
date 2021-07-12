@@ -3,7 +3,7 @@ services:
   - docker
 
 before_install:
-  - docker build naurel1467/my-test -f ./client/Dockerfile.dev ./client
+  - docker build -t naurel1467/my-test -f ./client/Dockerfile.dev ./client
 
 script:
   - docker run naurel1467/my-test npm test -- --coverage
