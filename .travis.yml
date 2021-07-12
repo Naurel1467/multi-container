@@ -1,0 +1,25 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build naurel1467/my-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run naurel1467/my-test npm test -- --coverage
+
+after_success:
+  - docker build -t naurel1467/multi-client ./client
+  - docker build -t naurel1467/multi-nginx ./nginx
+  - docker build -t naurel1467/multi-server ./server 
+  - docker build -t naurel1467/multi-worker ./worker
+
+
+#login docker
+  - echo "$DOCKER_PASS" |  docker login -u "$DOCKER_ID" --password-stdin
+  #push images to docker
+
+  - docker push naurel1467/multi-client
+  - docker push naurel1467/multi-nginx
+  - docker push naurel1467/multi-server
+  - docker push naurel1467/multi-worker
